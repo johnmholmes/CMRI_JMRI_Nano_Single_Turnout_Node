@@ -8,6 +8,8 @@
 */
 #include <CMRI.h>
 #include <Servo.h>
+//#include <Auto485.h>   //uncomment this if you want to use a 3 wire rs485 module
+//#define DE_PIN 2       //uncomment this if you want to use a 3 wire rs485 module
 
 #define CMRI_ADDR 3
 #define turnout1ClosedPosition 65 // previous 70
@@ -36,7 +38,9 @@ int turnout1 = 0;
 #define turnoutMoveSpeed 8   // [ms] lower number is faster
 unsigned long turnoutMoveDelay;
 
-CMRI cmri(CMRI_ADDR, 24, 48); // defaults to a SMINI with address 0. SMINI = 24 inputs, 48 outputs
+CMRI cmri(CMRI_ADDR, 24, 48); // comment this out if useing 3 wire module
+//Auto485 bus(DE_PIN); //  uncomment this for 3 wire module
+//CMRI cmri(CMRI_ADDR, 24, 48, bus); //  uncomment this for 3 wire module
 Servo turnOut1;
 
 
@@ -72,7 +76,8 @@ void setup() {
   turnOut1.attach(3);
   turnOut1.write(turnout1ClosedPosition); 
 
-  Serial.begin(9600);
+  Serial.begin(9600);  // comment this out for 3 wire use
+  //bus.begin(96000); //uncomment this for 3 wire module
 }
 
 void loop() {
