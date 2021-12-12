@@ -5,6 +5,8 @@
   also will control 8 off signal leds
   This code can be used with a usb connected to pc when using jmri.
   This code use Chris Sharp slow motion servo code and help with servo disconnection
+  This is the final version i will be doing of this node. for demonstration purposes only
+  feel free to download and change the code for your use. see MIT licence for details
 */
 #include <CMRI.h>
 #include <Servo.h>
