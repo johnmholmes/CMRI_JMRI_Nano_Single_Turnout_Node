@@ -2,7 +2,7 @@
   TTL to RS485 Module Serial Port MCU Automatic Flow Control Module.
   simple servo cmri node which moves 1 servo and the sends back a bit back to jmri to indicate
   the servo has been moved
-  also will control 8 off signal leds
+  also will control 6 off signal leds
   This code can be used with a usb connected to pc when using jmri.
   This code use Chris Sharp slow motion servo code and help with servo disconnection
   This is the final version i will be doing of this node. for demonstration purposes only
@@ -18,14 +18,12 @@
 #define turnout1ThrownPosition 110  // previous 108
 
 // define signal leds turnout 1
-#define throughGreenLed 4 //jmri *002
-#define throughRedLed 5
-#define divergingGreenLed 6
-#define divergingRedLed 7
-#define throughApproachGreenLed 8
-#define throughApproachRedLed 9
-#define divergingApproachGreenLed  10
-#define divergingApproachRedLed  11
+#define throughApproachGreenLed 4 //jmri 3002
+#define throughApproachRedLed 5
+#define divergingApproachGreenLed 6
+#define divergingApproachRedLed 7
+#define throughGreenLed 8
+#define throughRedLed 9
 
 //define infrared detection peel
 #define Sensor1 A0
@@ -56,14 +54,13 @@ byte turnout1Target   = turnout1ClosedPosition;
 void setup() {
   delay(2000);
   //setup output pins
-  pinMode(throughGreenLed, OUTPUT);
-  pinMode(throughRedLed, OUTPUT);
-  pinMode(divergingGreenLed, OUTPUT);
-  pinMode(divergingRedLed, OUTPUT);
   pinMode(throughApproachGreenLed, OUTPUT);
   pinMode(throughApproachRedLed, OUTPUT);
-  pinMode(divergingApproachGreenLed , OUTPUT);
-  pinMode(divergingApproachRedLed , OUTPUT);
+  pinMode(divergingApproachGreenLed, OUTPUT);
+  pinMode(divergingApproachRedLed, OUTPUT);
+  pinMode(throughGreenLed, OUTPUT);
+  pinMode(throughRedLed, OUTPUT);
+
 
   //setup input pins
   pinMode(Sensor1, INPUT_PULLUP);
@@ -102,14 +99,13 @@ void loop() {
     turnOut1.detach();  //Disconnect the servo once its in the correct position
    }
 
-  digitalWrite (throughGreenLed, !cmri.get_bit(1)); //jmri 3002 SH1
-  digitalWrite (throughRedLed, !cmri.get_bit(2)); //SH1
-  digitalWrite (divergingGreenLed, !cmri.get_bit(3)); //SH2
-  digitalWrite (divergingRedLed, !cmri.get_bit(4)); //SH2
-  digitalWrite (throughApproachGreenLed, !cmri.get_bit(5)); //SH3
-  digitalWrite (throughApproachRedLed, !cmri.get_bit(6)); //SH3
-  digitalWrite (divergingApproachGreenLed , !cmri.get_bit(7)); //SH4
-  digitalWrite (divergingApproachRedLed , !cmri.get_bit(8)); //jmri 3009 SH4
+  digitalWrite (throughApproachGreenLed, !cmri.get_bit(1)); //jmri 3002 
+  digitalWrite (throughApproachRedLed, !cmri.get_bit(2)); 
+  digitalWrite (divergingApproachGreenLed, !cmri.get_bit(3)); 
+  digitalWrite (divergingApproachRedLed, !cmri.get_bit(4)); 
+  digitalWrite (throughGreenLed, !cmri.get_bit(5)); //SH3
+  digitalWrite (throughRedLed, !cmri.get_bit(6)); //SH3
+
 
   cmri.set_bit(1, !digitalRead(A0)); //jmri 3002
   cmri.set_bit(2, !digitalRead(A1));
