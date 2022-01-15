@@ -8,24 +8,25 @@
 
   We will have 1 sg90 servo to move the turnout attached to pin 3. JMRI address 3001.
 
-  We will have 3 signal heads each will have 2 leds 1 Green and 1 Red. i use comman anode
+  We will have 3 signal heads each will have 2 leds 1 Green and 1 Red. I use comman anode
   leds signals made by TMC so the anode goes to 5v and the negatives go to indivual pins
   on the Nano. 
 
   Pins 0 - 1 are used for Rx and Tx no trigger pin required due to using a TTL to RS485 Module 
-  Serial Port MCU Automatic Flow Control Module.
+  Serial Port MCU Automatic Flow Control Module I am Using.
   
   The Node can be used as is with a usb cable 
 
-  Or as is with a usb to RS485 bus adapter connected to pins 1 and 2.
+  Or as is with a usb to RS485 bus adapter connected to pins 1 and 2 of the Arduino.
 
   Or you can use a cheap RS485 adapter which uses 3 wires from the module. In this case you will
-  need to un comment out a few lines as marked in the sketch.
+  need to un comment out a few lines as marked in the sketch and you will also use pin 2 for triggering
+  between rx and tx datatransfers.
 
   
   This code use Chris Sharp a MERG member who slow motion servo code and help with servo disconnection
   
-  This is the final version i will be doing of this node. for demonstration purposes only
+  This is the final version I will be doing of this node. for demonstration purposes only
   
   feel free to download and change the code for your use. see MIT licence for details
 */
@@ -72,15 +73,15 @@ CMRI cmri(CMRI_ADDR, 24, 48); // comment this out if useing 3 wire module
 Servo turnOut1;// this seup the instance of the servoand gives it the name turnOut1
 
 
-// added code start
+// These 2 variables are use to check and set the turnout when data is recieved from JMRI
 
 byte turnout1Position = turnout1ClosedPosition;
 byte turnout1Target   = turnout1ClosedPosition;
 
-//  added code stop
+// This is the inital definitions beforweenter into the Arduino Void setup function.
 
 void setup() {
-  delay(2000);
+  delay(2000);// This delay i use to slow down some of the Arduino so they do not all start at the same time.
   //setup output pins
   pinMode(throughApproachGreenLed, OUTPUT);
   pinMode(throughApproachRedLed, OUTPUT);
@@ -90,22 +91,31 @@ void setup() {
   pinMode(throughRedLed, OUTPUT);
 
 
-  //setup input pins
+  //setup input pins these are all set for the Arduino to start of with the pins being at 5v stead state
+  //so when we read them for active state the Arduino pin will have droped to 0v
   pinMode(Sensor1, INPUT_PULLUP);
   pinMode(Sensor2, INPUT_PULLUP);
   pinMode(Sensor3, INPUT_PULLUP);
   pinMode(Sensor4, INPUT_PULLUP);
   pinMode(Sensor5, INPUT_PULLUP);
 
-  digitalWrite(throughGreenLed, LOW);  // light led 1 on start up  to show its working
+  // The next 3 lines of code just blink 1 green led at startup to show that they are working.
+  digitalWrite(throughGreenLed, LOW);  
   delay(2000);
   digitalWrite(throughGreenLed, HIGH);
+  
+  //These 2 lines of code tells the Arduino which pin the servo is on and sends it to the closed posistion.
   turnOut1.attach(3);
   turnOut1.write(turnout1ClosedPosition); 
 
+  //The 2 lines belowdepend on which way you plan to connect the Arduino to JMRI.
+  
   Serial.begin(9600);  // comment this out for 3 wire use
   //bus.begin(96000); //uncomment this for 3 wire module
 }
+
+//This is the end of the Arduino setup which will only get run once at startup or resteting the Arduino.
+
 
 void loop() {
   cmri.process();
