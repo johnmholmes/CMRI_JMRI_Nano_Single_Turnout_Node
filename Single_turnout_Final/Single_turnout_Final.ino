@@ -1,47 +1,75 @@
-/*pins 0 - 1 are usedfor Rx and Tx no trigger pin required due to using
-  TTL to RS485 Module Serial Port MCU Automatic Flow Control Module.
-  simple servo cmri node which moves 1 servo and the sends back a bit back to jmri to indicate
-  the servo has been moved
-  also will control 6 off signal leds
-  This code can be used with a usb connected to pc when using jmri.
-  This code use Chris Sharp slow motion servo code and help with servo disconnection
+/*
+  The sketch is used in conjunction with JMRI to control a Arduino Nano.
+  
+  It simulates a CMRI Smini device which can have 24 input lines and 48 output lines.
+  In this case we will not use that many.
+
+  The Node will have an address of 3
+
+  We will have 1 sg90 servo to move the turnout attached to pin 3. JMRI address 3001.
+
+  We will have 3 signal heads each will have 2 leds 1 Green and 1 Red. i use comman anode
+  leds signals made by TMC so the anode goes to 5v and the negatives go to indivual pins
+  on the Nano. 
+
+  Pins 0 - 1 are used for Rx and Tx no trigger pin required due to using a TTL to RS485 Module 
+  Serial Port MCU Automatic Flow Control Module.
+  
+  The Node can be used as is with a usb cable 
+
+  Or as is with a usb to RS485 bus adapter connected to pins 1 and 2.
+
+  Or you can use a cheap RS485 adapter which uses 3 wires from the module. In this case you will
+  need to un comment out a few lines as marked in the sketch.
+
+  
+  This code use Chris Sharp a MERG member who slow motion servo code and help with servo disconnection
+  
   This is the final version i will be doing of this node. for demonstration purposes only
+  
   feel free to download and change the code for your use. see MIT licence for details
 */
-#include <CMRI.h>
-#include <Servo.h>
+#include <CMRI.h>  //include the cmri library you will need to download this to you libaray folder
+#include <Servo.h> // include the servo library
 //#include <Auto485.h>   //uncomment this if you want to use a 3 wire rs485 module
 //#define DE_PIN 2       //uncomment this if you want to use a 3 wire rs485 module
 
-#define CMRI_ADDR 3
+#define CMRI_ADDR 3  //sets the address of the node this must be different for each node on your system
 #define turnout1ClosedPosition 65 // previous 70
 #define turnout1ThrownPosition 110  // previous 108
 
 // define signal leds turnout 1
 #define throughApproachGreenLed 4 //jmri 3002
-#define throughApproachRedLed 5
-#define divergingApproachGreenLed 6
-#define divergingApproachRedLed 7
-#define throughGreenLed 8
-#define throughRedLed 9
+#define throughApproachRedLed 5 //3003
+#define divergingApproachGreenLed 6 //3004
+#define divergingApproachRedLed 7 //3005
+#define throughGreenLed 8 //3006
+#define throughRedLed 9 //3007
 
-//define infrared detection peel
-#define Sensor1 A0
-#define Sensor2 A1
-#define Sensor3 A2
-#define Sensor4 A3
-#define Sensor5 A4
+//define infrared detection address 3001 is used to send turnout state
+#define Sensor1 A0 //3002
+#define Sensor2 A1 //3003
+#define Sensor3 A2 //3004
+#define Sensor4 A3 //3005
+#define Sensor5 A4 //3006
 
 int t1state = 0; //0 = closed 1 = thrown
-int turnout1 = 0;
+int turnout1 = 0; //the value is not important
 
 #define turnoutMoveSpeed 8   // [ms] lower number is faster
-unsigned long turnoutMoveDelay;
+unsigned long turnoutMoveDelay; // variable used servo timer
 
+/*The next bit of the code we setup the communication bus we will use. the 3 values inside the 
+ *brackets picks up the address in this case 3 and then sets the 24 inputs and 48 outputs which
+ *the cmri library requires to be able to do its work. If you want to use the 3 wire module
+ *you will have to comment out the first line and uncomment out the next 2 lines of code.
+ */
 CMRI cmri(CMRI_ADDR, 24, 48); // comment this out if useing 3 wire module
 //Auto485 bus(DE_PIN); //  uncomment this for 3 wire module
 //CMRI cmri(CMRI_ADDR, 24, 48, bus); //  uncomment this for 3 wire module
-Servo turnOut1;
+
+
+Servo turnOut1;// this seup the instance of the servoand gives it the name turnOut1
 
 
 // added code start
