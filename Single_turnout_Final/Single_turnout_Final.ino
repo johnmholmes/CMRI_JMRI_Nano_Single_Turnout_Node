@@ -118,9 +118,17 @@ void setup() {
 
 
 void loop() {
-  cmri.process();
+  cmri.process();//This starts the cmri function which recieves the data sent or recieved from JMRI
+  /*The next line of code takes the first bit of data and stores it in the variable turnout1.
+    This will be either a 1 or 0. 1 means jmri wants the turnout to be thrown
+  */
   turnout1 = (cmri.get_bit(0)); //turnout 3001 jmri address
-
+  /* The 3 if statment below are comparing the 2 variable current values and if one of them matchs 
+     it will then sets the turnout1Taget to either thrown or closed and then changes the value of
+     the t1state variable
+     The last if statement checks if the turnout is were we want it then disconnect the servo to save 
+     ant servo jitter
+  */
   if (turnout1 == 1 && t1state == 0) {
     turnOut1.attach(3);   // reconnect the servo ready for movement
     turnout1Target = turnout1ThrownPosition;   //  changed to set the target line below added to attach servo
@@ -137,20 +145,37 @@ void loop() {
     turnOut1.detach();  //Disconnect the servo once its in the correct position
    }
 
-  digitalWrite (throughApproachGreenLed, !cmri.get_bit(1)); //jmri 3002 
-  digitalWrite (throughApproachRedLed, !cmri.get_bit(2)); 
-  digitalWrite (divergingApproachGreenLed, !cmri.get_bit(3)); 
-  digitalWrite (divergingApproachRedLed, !cmri.get_bit(4)); 
-  digitalWrite (throughGreenLed, !cmri.get_bit(5)); //SH3
-  digitalWrite (throughRedLed, !cmri.get_bit(6)); //SH3
+  /*
+     These 5 lines of code set the oupt pin to either on or off. You will see the ! this is used to invert
+     the value recieved from JMRI. i have to do this because the leds i us are common anode type. 
+  */
+  digitalWrite (throughApproachGreenLed, !cmri.get_bit(1)); //SH 1 jmri 3002 
+  digitalWrite (throughApproachRedLed, !cmri.get_bit(2)); // SH 1 jmri 3003
+  digitalWrite (divergingApproachGreenLed, !cmri.get_bit(3)); //SH 2 3004
+  digitalWrite (divergingApproachRedLed, !cmri.get_bit(4)); // SH 2 3005
+  digitalWrite (throughGreenLed, !cmri.get_bit(5)); //SH 3 3006
+  digitalWrite (throughRedLed, !cmri.get_bit(6)); //SH 3 3007
 
+  /*
+     You will notice here that we seem to use the same jmri address this is because the above are outputs
+     and the ones below are inputs so they can have the same number but are different to jmri
+     Again the sensors i use means i have to invert the value that the arduino reads from the pins
+     Also you may have spotted that they start at 3002 not 3001. This is because during the turnout move
+     in the if statement i send bit 0 to tell jmri what the turnout position is set at.
+  */
 
   cmri.set_bit(1, !digitalRead(A0)); //jmri 3002
-  cmri.set_bit(2, !digitalRead(A1));
-  cmri.set_bit(3, !digitalRead(A2));
-  cmri.set_bit(4, !digitalRead(A3));
-  cmri.set_bit(5, !digitalRead(A4));
+  cmri.set_bit(2, !digitalRead(A1)); // 3003
+  cmri.set_bit(3, !digitalRead(A2)); // 3004
+  cmri.set_bit(4, !digitalRead(A3)); // 3005
+  cmri.set_bit(5, !digitalRead(A4)); // 3006
 
+
+  /*
+    The final if statement is used to use slow motion movement of the turnout
+    it will only work itf the turnout is not in the correct psotion
+    and it moves the turnout 1 deg at a time uptil it reaches the required position.
+  */
   if (turnout1Position != turnout1Target) {
     if (millis() > turnoutMoveDelay) {
       turnoutMoveDelay = millis() + turnoutMoveSpeed;
