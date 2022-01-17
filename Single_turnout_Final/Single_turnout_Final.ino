@@ -173,8 +173,8 @@ void loop() {
 
   /*
     The final if statement is used to use slow motion movement of the turnout
-    it will only work itf the turnout is not in the correct psotion
-    and it moves the turnout 1 deg at a time uptil it reaches the required position.
+    it will only work if the turnout is not in the correct position
+    and it moves the turnout 1 deg at a time until it reaches the required position.
   */
   if (turnout1Position != turnout1Target) {
     if (millis() > turnoutMoveDelay) {
