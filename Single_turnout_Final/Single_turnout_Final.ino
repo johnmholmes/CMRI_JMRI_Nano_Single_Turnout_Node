@@ -21,7 +21,7 @@
 
   Or you can use a cheap RS485 adapter which uses 3 wires from the module. In this case you will
   need to un comment out a few lines as marked in the sketch and you will also use pin 2 for triggering
-  between rx and tx datatransfers.
+  between rx and tx data transfers.
 
   
   This code use Chris Sharp a MERG member who slow motion servo code and help with servo disconnection
