@@ -1,6 +1,6 @@
 # The sketch is for demonstration purposes only it does work
 
-# This node is based on a Arduino Nano and will control 1 turnout and 3 signal heads from a JMRI CMRI Node connection.
+# This node is based on a Arduino Nano and will control 1 turnout and 3 signal heads from a JMRI CMRI Node connection and also read 5 sensors and report back.
 
 I use a baurd rate of (9600) if you use a different speed you will need to change this in the sketch.
 
