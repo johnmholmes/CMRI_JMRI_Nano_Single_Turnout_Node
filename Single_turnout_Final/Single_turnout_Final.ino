@@ -24,7 +24,7 @@
   between rx and tx data transfers.
 
   
-  This code use Chris Sharp a MERG member who slow motion servo code and help with servo disconnection
+  This code use Chris Sharp a MERG member whose slow motion servo code 
   
   This is the final version I will be doing of this node. for demonstration purposes only
   
