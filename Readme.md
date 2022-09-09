@@ -12,3 +12,4 @@ The signals i use use a common anode type.
 
 The sketch has been over commented to help you to understand how it works.
 
+The signal head pdf needs amending in the future as SH4 is not required and was a mistake when I did the work.
