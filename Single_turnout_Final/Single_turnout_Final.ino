@@ -110,7 +110,7 @@ void setup() {
 
   //The 2 lines belowdepend on which way you plan to connect the Arduino to JMRI.
   
-  Serial.begin(9600);  // comment this out for 3 wire use
+  Serial.begin(115200);  // comment this out for 3 wire use
   //bus.begin(115200); //uncomment this for 3 wire module
 }
 
