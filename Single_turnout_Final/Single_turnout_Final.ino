@@ -32,8 +32,8 @@
 */
 #include <CMRI.h>  //include the cmri library you will need to download this to you libaray folder
 #include <Servo.h> // include the servo library
-//#include <Auto485.h>   //uncomment this if you want to use a 3 wire rs485 module
-//#define DE_PIN 2       //uncomment this if you want to use a 3 wire rs485 module
+#include <Auto485.h>   //uncomment this if you want to use a 3 wire rs485 module
+#define DE_PIN 2       //uncomment this if you want to use a 3 wire rs485 module
 
 #define CMRI_ADDR 3  //sets the address of the node this must be different for each node on your system
 #define turnout1ClosedPosition 65 // previous 70
@@ -66,8 +66,8 @@ unsigned long turnoutMoveDelay; // variable used servo timer
  *you will have to comment out the first line and uncomment out the next 2 lines of code.
  */
 CMRI cmri(CMRI_ADDR, 24, 48); // comment this out if useing 3 wire module
-//Auto485 bus(DE_PIN); //  uncomment this for 3 wire module
-//CMRI cmri(CMRI_ADDR, 24, 48, bus); //  uncomment this for 3 wire module
+Auto485 bus(DE_PIN); //  uncomment this for 3 wire module
+//CMRI cmri(CMRI_ADDR, 24, 48,); //  uncomment this for 3 wire module
 
 
 Servo turnOut1;// this seup the instance of the servoand gives it the name turnOut1
@@ -110,8 +110,8 @@ void setup() {
 
   //The 2 lines belowdepend on which way you plan to connect the Arduino to JMRI.
   
-  Serial.begin(115200);  // comment this out for 3 wire use
-  //bus.begin(115200); //uncomment this for 3 wire module
+  //Serial.begin(115200);  // comment this out for 3 wire use
+  bus.begin(9600); //uncomment this for 3 wire module
 }
 
 //This is the end of the Arduino setup which will only get run once at startup or resteting the Arduino.
