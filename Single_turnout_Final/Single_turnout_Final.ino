@@ -65,10 +65,8 @@ unsigned long turnoutMoveDelay; // variable used servo timer
  *the cmri library requires to be able to do its work. If you want to use the 3 wire module
  *you will have to comment out the first line and uncomment out the next 2 lines of code.
  */
-CMRI cmri(CMRI_ADDR, 24, 48); // comment this out if useing 3 wire module
+CMRI cmri(CMRI_ADDR, 24, 48); 
 Auto485 bus(DE_PIN); //  uncomment this for 3 wire module
-//CMRI cmri(CMRI_ADDR, 24, 48,); //  uncomment this for 3 wire module
-
 
 Servo turnOut1;// this seup the instance of the servoand gives it the name turnOut1
 
