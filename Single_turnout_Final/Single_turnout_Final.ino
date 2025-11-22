@@ -12,17 +12,16 @@
   leds signals made by TMC so the anode goes to 5v and the negatives go to indivual pins
   on the Nano. 
 
-  Pins 0 - 1 are used for Rx and Tx no trigger pin required due to using a TTL to RS485 Module 
+  Pins 0 - 1 are used for Rx and Tx 
+  
+  no trigger pin is required due to using a TTL to RS485 Module 
   Serial Port MCU Automatic Flow Control Module I am Using.
   
-  The Node can be used as is with a usb cable 
-
-  Or as is with a usb to RS485 bus adapter connected to pins 1 and 2 of the Arduino.
+  The Node can be used as is with a usb cable.
 
   Or you can use a cheap RS485 adapter which uses 3 wires from the module. In this case you will
   need to un comment out a few lines as marked in the sketch and you will also use pin 2 for triggering
   between rx and tx data transfers.
-
   
   This code use Chris Sharp a MERG member whose slow motion servo code 
   
@@ -71,7 +70,6 @@ CMRI cmri(CMRI_ADDR, 24, 48, bus); // used for 3 wire modules
 
 Servo turnOut1;// this seup the instance of the servoand gives it the name turnOut1
 
-
 // These 2 variables are use to check and set the turnout when data is recieved from JMRI
 
 byte turnout1Position = turnout1ClosedPosition;
@@ -88,7 +86,6 @@ void setup() {
   pinMode(divergingApproachRedLed, OUTPUT);
   pinMode(throughGreenLed, OUTPUT);
   pinMode(throughRedLed, OUTPUT);
-
 
   //setup input pins these are all set for the Arduino to start of with the pins being at 5v stead state
   //so when we read them for active state the Arduino pin will have droped to 0v
@@ -114,7 +111,6 @@ void setup() {
 }
 
 //This is the end of the Arduino setup which will only get run once at startup or resteting the Arduino.
-
 
 void loop() {
   cmri.process();//This starts the cmri function which recieves the data sent or recieved from JMRI
@@ -168,7 +164,6 @@ void loop() {
   cmri.set_bit(3, !digitalRead(A2)); // 3004
   cmri.set_bit(4, !digitalRead(A3)); // 3005
   cmri.set_bit(5, !digitalRead(A4)); // 3006
-
 
   /*
     The final if statement is used to use slow motion movement of the turnout
